@@ -1,24 +1,20 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import PinInput from './Components/pinInput';
 
 function App() {
+  function handlePinComplete(pin: any) {
+    console.log(`PIN entered: ${pin}`);
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <PinInput
+        length={6} // sets the number of input boxes to 6
+        secret={false} // sets whether the input boxes are masked or not
+        onComplete={handlePinComplete} // a callback function that is called when all boxes are filled
+        />
     </div>
   );
 }
