@@ -24,14 +24,18 @@ interface PinInputProps {
   length: number;
   secret?: boolean;
   onComplete?: (pin: string) => void;
+  regex?: RegExp;
 }
+
 
 const PinInput: React.FC<PinInputProps> = ({
   length,
   secret = false,
   onComplete,
+  regex,
 }) => {
-  const [pin, setPin] = useState<string[]>(new Array(length).fill(''));
+
+  const [pin, setPin] = useState<string[]>(new Array(length).fill('0'));
   const refs = useRef<Array<HTMLInputElement>>([]);
   const firstBoxRef = useRef<HTMLInputElement>(null);
 
@@ -41,7 +45,49 @@ const PinInput: React.FC<PinInputProps> = ({
     }
   }, []);
 
-  
+  const styleError = (index: number) => {
+    // Make some style to show that the key is not allowed
+
+    refs.current[index].style.borderColor = "red";
+    refs.current[index].style.color = "red";
+    refs.current[index].style.scale = "1.2";
+    //wait 300ms and then remove the animation
+    setTimeout(function () { refs.current[index].style.scale = "1"; }, 300);
+  }
+  const styleValid = (index: number) => {
+    // Make some style to show that the key is allowed
+    refs.current[index].style.borderColor = "lightgreen";
+    refs.current[index].style.color = "black";
+    refs.current[index].style.scale = "1";
+  }
+  const reStyleBoxes = () => {
+    for (let i = 0; i < length; i++) {
+      if (regex?.test(pin[i]) === false) {
+        styleError(i)
+
+      } else {
+
+        styleValid(i)
+      }
+    }
+  }
+
+  useEffect(() => {
+    reStyleBoxes();
+
+  }, [regex]);
+
+
+  const styleForInvalidKey = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
+    const digit = event.key;
+    if (!regex?.test(digit)) {
+      event.preventDefault();
+      styleError(index);
+      return;
+    } else {
+      styleValid(index);
+    }
+  }
 
 
 
@@ -56,28 +102,27 @@ const PinInput: React.FC<PinInputProps> = ({
         refs.current[index - 1].focus();
       }
       return;
-      
+
     }
     if (event.key === 'ArrowLeft') {
-        // Move to the previous box
-        if (index > 0 && refs.current[index - 1]) {
-            refs.current[index - 1].focus();
-            }
-        return;
-    }
-    if (event.key === 'ArrowRight') {
-        // Move to the next box
-        if (index < length - 1 && refs.current[index + 1]) {
-            refs.current[index + 1].focus();
-            }
-        return;
-    }
-
-    // Ignore non-digit keys
-    if (!/^\d$/.test(digit)) {
-      event.preventDefault();
+      // Move to the previous box
+      if (index > 0 && refs.current[index - 1]) {
+        refs.current[index - 1].focus();
+      }
       return;
     }
+    if (event.key === 'ArrowRight' || event.key === 'Tab') {
+      event.preventDefault(); // prevent the tab default behavior
+      // Move to the next box
+      if (index < length - 1 && refs.current[index + 1]) {
+        refs.current[index + 1].focus();
+      }
+      return;
+    }
+    console.log(regex)
+    // Ignore non-digit keys
+    styleForInvalidKey(index, event);
+
 
     // Update the pin and move to the next box
     const newPin = [...pin];
@@ -88,32 +133,32 @@ const PinInput: React.FC<PinInputProps> = ({
     }
 
     // Invoke the onComplete callback if all boxes are filled
-    if (newPin.every(d => /^\d$/.test(d)) && onComplete) {
+    if (newPin.every(d => regex?.test(d)) && onComplete && refs.current[index] == refs.current[length - 1]) {
       onComplete(newPin.join(''));
     }
 
-    
+
   };
 
-  const handlePaste = (event: any, index: number) => {
-    const text = event.clipboardData.getData('text/plain');
-    console.log("text");
-    
-    if (text.length !== 6) {
-      event.preventDefault();
-      return;
-    }
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedText = e.clipboardData.getData("text/plain");
+    const pastedChars = pastedText.split("");
 
-    const newPin = [...pin];
-    for (let i = 0; i < 6; i++) {
-      const digit = text[i];
-      if (/^\d$/.test(digit)) {
-        newPin[index + i] = digit;
-      } else {
-        event.preventDefault();
-        return;
+    let index = 0;
+    let newPin = [...pin];
+
+    for (const char of pastedChars) {
+      if (index >= length) {
+        break;
+      }
+
+      if (regex?.test(char)) {
+        newPin[index] = char;
+        index++;
       }
     }
+
     setPin(newPin);
   };
 
@@ -126,9 +171,9 @@ const PinInput: React.FC<PinInputProps> = ({
           maxLength={1}
           value={pin[i]}
           ref={(el: HTMLInputElement) => refs.current[i] = el!}
-          onChange={() => {}}
+          onChange={() => { }}
           onKeyDown={(event) => handleKeyDown(event, i)}
-          onPaste={(event) => handlePaste(event, i)}
+          onPaste={handlePaste}
 
         />
       ))}
@@ -137,3 +182,5 @@ const PinInput: React.FC<PinInputProps> = ({
 };
 
 export default PinInput;
+
+
