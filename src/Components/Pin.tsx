@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PinInput from './PinInput';
 
 function Pin() {
-    const [pinLength, setPinLength] = useState<number>(4);
+    const [pinLength, setPinLength] = useState<number>(5);
     const [regex, setRegex] = useState<RegExp>(/./);
     const [secretMode, setSecretMode] = useState(false);
 
@@ -10,7 +10,7 @@ function Pin() {
         setTimeout(() =>
             alert(`PIN entered: ${pin}`),
             0);
-        
+
     }
 
     const handlePinLengthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,9 +29,9 @@ function Pin() {
             <div className="container">
                 <h1 className='title'>Can you crack the pin ?</h1>
                 <div className='pin-config'>
-                    <div>
+                    <div className='left'>
                         <div className="pin-length">
-                            <label htmlFor="pinLengthInput">Pin Length:</label>
+                            <label htmlFor="pinLengthInput">Length:</label>
                             <input type="number" id="pinLengthInput" name="pinLengthInput" min="1" max="10" value={pinLength} onChange={handlePinLengthChange} />
                         </div>
                         <div className='pin-regex'>
@@ -51,10 +51,10 @@ function Pin() {
                     </button>
                 </div>
                 <PinInput
-                    length={pinLength} // sets the number of input boxes to 6
-                    secret={secretMode} // sets whether the input boxes are masked or not
-                    onComplete={handlePinComplete} // a callback function that is called when all boxes are filled
-                    regex={regex} // a regex to determine what characters are allowed
+                    length={pinLength}
+                    secret={secretMode}
+                    onComplete={handlePinComplete}
+                    regex={regex}
                 />
 
             </div>

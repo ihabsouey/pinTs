@@ -24,6 +24,10 @@ const PinInput: React.FC<PinInputProps> = ({
     refs.current[0].focus();
   }, []);
 
+  useEffect(() => {
+    reStyleBoxes();
+  }, [regex]);
+
   // Make some style to show that the key is not allowed
   const styleError = (index: number) => {
     refs.current[index].style.borderColor = "red";
@@ -42,18 +46,13 @@ const PinInput: React.FC<PinInputProps> = ({
   //Re-style all boxes when regex changes
   const reStyleBoxes = () => {
     for (let i = 0; i < length; i++) {
-      if (regex?.test(pin[i]) === false) {
-        styleError(i)
-
-      } else {
-
+      if (regex?.test(pin[i])) {
         styleValid(i)
+      } else {
+        styleError(i)
       }
     }
   }
-  useEffect(() => {
-    reStyleBoxes();
-  }, [regex]);
 
   // style the boxes when the pin changes
   const styleForInvalidKey = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -66,8 +65,6 @@ const PinInput: React.FC<PinInputProps> = ({
       styleValid(index);
     }
   }
-
-
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     const digit = event.key;
@@ -115,7 +112,6 @@ const PinInput: React.FC<PinInputProps> = ({
       onComplete(newPin.join(''));
     }
 
-
   };
   // Handle paste event
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
@@ -152,7 +148,6 @@ const PinInput: React.FC<PinInputProps> = ({
           onChange={() => { }}
           onKeyDown={(event) => handleKeyDown(event, i)}
           onPaste={handlePaste}
-
         />
       ))}
     </div>

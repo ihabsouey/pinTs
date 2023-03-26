@@ -72,38 +72,31 @@
 .pin-length , .pin-regex{
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
   margin-bottom: 10px;
   
 }
-.pin-length input {
-  width: 50%;
-  height: 1.1em;
-  font-size: 1.3em;
+.pin-length input , .pin-regex select{
+  width: 40%;
+  height: 1.2em;
+  font-size: 1.2em;
   text-align: center;
   border: 1px solid #ddd;
   background-color: transparent;
   color: #fff;
   border-radius: 0.25em;
-  padding: 10px 0 ;
 }
 .pin-regex select{
-  width:50%;
-  height: 1.5em;
-  font-size: 1em;
-  text-align: center;
-  border: 1px solid #ddd;
-  background-color: transparent;
-  color: #fff;
-  border-radius: 0.25em;
   cursor: pointer;
 
 }
 .pin-regex select option{
   color: #000;
   background-color: transparent;
+  font-size: .8em;
+
 
 }
 
@@ -124,3 +117,4 @@
   transition: all 0.3s ease-in-out;
 }
 
+/* pin-config end */
