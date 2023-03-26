@@ -1,38 +1,126 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Manrope', sans-serif;
+  
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.pin{
+  background-color: #1f2632;
+  color: #cee3e9;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 100vh;
+}
+.container {
+
+  width: 100%;
+  padding: 10vh 20px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 50px;
+  flex-direction: column;
+
+}
+.title{
+  font-size: 2em;
+  font-family: 'Press Start 2P', cursive;
+  margin-bottom: 20px;
+  color: aqua;
+}
+ 
+
+/* pin Input  start*/
+.PinInputContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.pin-box {
+  width: 2em;
+  height: 2em;
+  margin: 0 0.5em;
+  font-size: 1.5em;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 0.25em;
 }
 
-.App-link {
-  color: #61dafb;
+.pin-box:focus {
+  border-color: blue;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* pin Input  end*/
+
+/* pin-config start */
+.pin-config {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 10vw;
+  font-size: 1.5em;
+
 }
+ 
+.pin-length , .pin-regex{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+  
+}
+.pin-length input {
+  width: 50%;
+  height: 1.1em;
+  font-size: 1.3em;
+  text-align: center;
+  border: 1px solid #ddd;
+  background-color: transparent;
+  color: #fff;
+  border-radius: 0.25em;
+  padding: 10px 0 ;
+}
+.pin-regex select{
+  width:50%;
+  height: 1.5em;
+  font-size: 1em;
+  text-align: center;
+  border: 1px solid #ddd;
+  background-color: transparent;
+  color: #fff;
+  border-radius: 0.25em;
+  cursor: pointer;
+
+}
+.pin-regex select option{
+  color: #000;
+  background-color: transparent;
+
+}
+
+.pin-secret{
+  background: transparent;
+  padding: 20px 25px;
+  border: 1px solid #ddd;
+  border-radius: 0.25em ;
+  color: #fff;
+  font-size: 0.8em;
+  cursor: pointer;
+}
+.pin-secret:hover{
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+  transform: scale(1.1);
+  transition: all 0.3s ease-in-out;
+}
+

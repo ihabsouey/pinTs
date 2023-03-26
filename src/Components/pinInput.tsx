@@ -1,24 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import '../App.css';
 
-const PinInputContainer = styled.div`
-  display: flex;
-`;
-
-const PinBox = styled.input`
-  width: 2em;
-  height: 2em;
-  margin: 0 0.5em;
-  font-size: 1.5em;
-  text-align: center;
-  border: 1px solid #ddd;
-  border-radius: 0.25em;
-
-  &:focus {
-    outline: none;
-    border-color: blue;
-  }
-`;
 
 interface PinInputProps {
   length: number;
@@ -37,29 +19,27 @@ const PinInput: React.FC<PinInputProps> = ({
 
   const [pin, setPin] = useState<string[]>(new Array(length).fill('0'));
   const refs = useRef<Array<HTMLInputElement>>([]);
-  const firstBoxRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (firstBoxRef.current) {
-      firstBoxRef.current.focus();
-    }
+    refs.current[0].focus();
   }, []);
 
+  // Make some style to show that the key is not allowed
   const styleError = (index: number) => {
-    // Make some style to show that the key is not allowed
-
     refs.current[index].style.borderColor = "red";
     refs.current[index].style.color = "red";
     refs.current[index].style.scale = "1.2";
     //wait 300ms and then remove the animation
     setTimeout(function () { refs.current[index].style.scale = "1"; }, 300);
   }
+
+  // Make some style to show that the key is allowed
   const styleValid = (index: number) => {
-    // Make some style to show that the key is allowed
     refs.current[index].style.borderColor = "lightgreen";
     refs.current[index].style.color = "black";
     refs.current[index].style.scale = "1";
   }
+  //Re-style all boxes when regex changes
   const reStyleBoxes = () => {
     for (let i = 0; i < length; i++) {
       if (regex?.test(pin[i]) === false) {
@@ -71,13 +51,11 @@ const PinInput: React.FC<PinInputProps> = ({
       }
     }
   }
-
   useEffect(() => {
     reStyleBoxes();
-
   }, [regex]);
 
-
+  // style the boxes when the pin changes
   const styleForInvalidKey = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
     const digit = event.key;
     if (!regex?.test(digit)) {
@@ -139,7 +117,7 @@ const PinInput: React.FC<PinInputProps> = ({
 
 
   };
-
+  // Handle paste event
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     const pastedText = e.clipboardData.getData("text/plain");
@@ -163,9 +141,9 @@ const PinInput: React.FC<PinInputProps> = ({
   };
 
   return (
-    <PinInputContainer>
+    <div className='PinInputContainer'>
       {Array.from({ length }, (_, i) => (
-        <PinBox
+        <input className='pin-box'
           key={i}
           type={secret ? 'password' : 'tel'}
           maxLength={1}
@@ -177,7 +155,7 @@ const PinInput: React.FC<PinInputProps> = ({
 
         />
       ))}
-    </PinInputContainer>
+    </div>
   );
 };
 
