@@ -26,7 +26,7 @@ const PinInput: React.FC<PinInputProps> = ({
 
   useEffect(() => {
     reStyleBoxes();
-  }, [regex]);
+  }, );
 
   // Make some style to show that the key is not allowed
   const styleError = (index: number) => {
@@ -94,8 +94,10 @@ const PinInput: React.FC<PinInputProps> = ({
       }
       return;
     }
-    console.log(regex)
-    // Ignore non-digit keys
+    if (event.key.length > 1) 
+      return;
+    
+    // Style Invalidkey 
     styleForInvalidKey(index, event);
 
 
